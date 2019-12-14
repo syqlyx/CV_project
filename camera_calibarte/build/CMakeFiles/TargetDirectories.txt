@@ -1,0 +1,3 @@
+/media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV_project/camera_calibarte/build/CMakeFiles/rebuild_cache.dir
+/media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV_project/camera_calibarte/build/CMakeFiles/edit_cache.dir
+/media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV_project/camera_calibarte/build/CMakeFiles/calibration_node.dir
