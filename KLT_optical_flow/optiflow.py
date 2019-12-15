@@ -34,7 +34,7 @@ class OptiFlow:
                 print("读取图像失败")
                 break
             new_gray = cv.cvtColor(new_frame, cv.COLOR_BGR2GRAY)
-
+            vis = new_frame.copy()  
             if(len(self.tracks)>0):
                 img1, img2 = self.old_gray, new_gray
                 feature = np.float32([vec[-1] for vec in self.tracks]).reshape(-1,1,2)#每个特征点追踪序列的最新值，也就是最近的图中的特征点坐标
@@ -48,8 +48,12 @@ class OptiFlow:
                     if flag:
                         im.append((x,y))#时间序列上进行扩展
                     newtracks.append(im)##滤除丢失的跟踪点
-#对于存储过长序列的某个点，则可认为是随车运动的物体？？？
+                    cv.circle(vis, (x, y), 2, (0, 255, 0), -1) 
                 self.tracks = newtracks
+                cv.polylines(vis, [np.int32(tr) for tr in self.tracks], False, (0, 255, 0))#绘制多边形，点集画线，不封闭
+
+#对于存储过长序列的某个点，则可认为是随车运动的物体？？？
+                
                 print("第{}帧".format(i))
 
                 # 根据跟踪计算特征点在像素上的运动
@@ -59,12 +63,14 @@ class OptiFlow:
                 first_gray = new_gray 
                 mask = np.zeros_like(first_gray) 
                 mask[:] = 255 
+                for x, y in [np.int32(tr[-1]) for tr in self.tracks]:#跟踪的角点画圆  
+                    cv2.circle(mask, (x, y), 5, 0, -1) 
                 rawfeature = cv.goodFeaturesToTrack(first_gray, maxCorners=100, qualityLevel=0.3, minDistance=7, mask = mask, blockSize=7)
                 feature = cv.cornerSubPix(first_gray, rawfeature, (11, 11), (-1, -1), (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_COUNT, 30, 0.01))
                 if feature is not None:  
                     for x, y in np.float32(feature).reshape(-1, 2):  
                         self.tracks.append([(x, y)])#新添追踪点   ([()])  -1,1,2
-
+ 
                 ##确认之前的基准，避免丢失
             self.old_gray = new_gray
             print("第{}帧".format(i))
