@@ -1,0 +1,125 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{CJKutf8}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{mathptmx}
+\usepackage{times}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{cite}
+\usepackage{subfigure}
+\usepackage{verbatim}
+\usepackage{multirow}
+\usepackage{bm}
+\usepackage{float}
+\usepackage{etoolbox,xstring,mfirstuc,textcase}
+\usepackage{indentfirst}
+\usepackage{enumerate}
+\author{沈艳晴}
+\title{Assignment1--相机参数标定}
+\geometry{left=3.18cm, right=3.18cm, top=2.54cm, bottom=2.54cm}
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+\CJKindent%中文缩进专用
+\maketitle
+
+%分别有编号，对齐
+\begin{align}
+a&=1 \\
+b&=2
+\end{align}
+%无编号，突出显示，对齐
+$$
+\begin{aligned}
+a&=1 \\
+b&=2
+\end{aligned}
+$$
+%有一个编号，对齐
+\begin{equation}
+\begin{aligned}
+a&=1 \\
+b&=2
+\end{aligned}
+\end{equation}
+%不突出显示，行内上下对齐
+what i mean is that $
+\begin{aligned}
+a&=1 \\
+b&=2
+\end{aligned}
+$, therefore
+
+$$
+\begin{array}{cc}
+1 & 2\\2&3 \\2&6
+\end{array}
+$$
+
+$$
+\left[
+\begin{array}{c}
+1 \\ 2 \\ 3
+\end{array}\right]
+$$
+
+$$
+\begin{bmatrix}
+1 \\ 2 \\ 3
+\end{bmatrix}
+$$
+
+\[
+\begin{matrix}
+1 & 2\\2&3 \\2&6
+\end{matrix}
+\]
+%公式内不允许空行
+
+
+\section{aa} \label{aa}
+
+
+%\pageref{•}%返回页码
+
+%\ref{•}%返回编号，但对于浮动体可能会返回所在节[图、表]
+
+section~ \ref{aa}
+
+
+%%%%{
+交叉引用（cross-referencing）的三个命令:
+/label{marker}： 对可能引用的对象一个标记，可以认为是名字
+/ref{marker}： 引用之前定义为marker的对象,输入该对象被赋予的编号
+(ref) == eqref
+/pageref{marker}：打印对象所在的页码
+
+a)Latex 自动计算编号 b) 通过一次编译，生成标号，二次编译将/ref{marker}换成数字（两次编译）（只有一次编译，可能会引用未更新的编号） c) 如果引用的标记不存在，latex编译会通过，但是提示一个警告，同时将对应的/ref{marker}用？？换下
+
+原则上/label位置很灵活，但是建议直接紧跟所要指代的对象。特别的，如果一个标签在浮动环境中被声明的话，只有当它紧跟在caption{}之后，/ref{marker} 才会返回对应的图片或者表格的编号。否则，即声明写在浮动环境]外，/ref{marker}会直接返回所在section的编号。
+原因在于latex只有遇到/caption之后才给对象添加计数器。因此，/label在前的话，对应的/ref会被迫引用上级元素的编号。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{CJK*}
+\end{document}

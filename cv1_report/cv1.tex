@@ -10,6 +10,7 @@
 \usepackage{amssymb}
 \usepackage{cite}
 \usepackage{subfigure}
+\usepackage{subfig}
 \usepackage{verbatim}
 \usepackage{multirow}
 \usepackage{bm}
@@ -34,29 +35,43 @@
 本文通过使用张氏标定法对采集的图像进行处理，求解对应相机的参数。
 \end{abstract}
 
-\section{摄像机成像模型}
-在对图像与三维空间对应关系的研究中，常用的理想模型是针孔摄像机模型(Pinhole Camera Model)。
-示意图如图 \ref{fig:camera1}
+\section{针孔成像模型}
 
+在对图像与3D空间对应关系的研究中，常用的理想模型为摄像机针孔模型(Pinhole Camera Model)。
+示意图如Fig. \ref{fig:camera1}.
 \begin{figure}[htbp]
     \centering
+    \includegraphics[height=4.5cm,width=8.5cm]{/home/midou/class/cv/cv_1report/1.png}
+    \caption{小孔成像简化示意图}
     \label{fig:camera1}
-    \includegraphics[height=4.5cm,width=9.5cm]{/home/vickylzy/Desktop/cornersubpix.png}
-    \caption{亚像素优化}
 \end{figure}
 
+将三维物体成像过程抽象为Fig. \ref{fig:camera2}中的数学模型，为点的匹配建立数学上的对应关系。
 \begin{figure}[htbp]
     \centering
+    \includegraphics[height=4.5cm,width=8.5cm]{/home/midou/class/cv/cv_1report/2.png}
+    \caption{小孔成像数学模型}
     \label{fig:camera2}
-    \includegraphics[height=4.5cm,width=9.5cm]{/home/vickylzy/Desktop/cornersubpix.png}
-    \caption{亚像素优化}
 \end{figure}
+
 \section{相机坐标系统}
+\subsection{坐标系概述}
 相机标定问题中一共涉及到四个坐标系统，分别是世界坐标系($X_w,Y_w,Z_w$)、相机坐标系($X_c,Y_c,Z_c$)、图像物理坐标系(x,y)、像素坐标系(u,v)；
+
+\begin{itemize}
+    \item 世界坐标系与摄像机和成像平面本身独立，我们将根据世界坐标系对摄像机姿态进行描述。在实际工程中，可根据具体情况自由选择。
+    \item 相机坐标系的原点位于镜头光心处，z轴为为光轴，垂直于成像平面；x、y轴则分别平行于相平面的两边。
+    \item 图像物理坐标系的原点是光轴与成像平面的交点，即主点，也就是图像中心点。x、y轴与相机坐标系一致。
+    \item 图像像素坐标系是对物理坐标系进行了尺度变换和原点平移。一般情况下，将图像左上角定义为原点，单位从毫米转换为像素。　
+\end{itemize}
+
 其中世界坐标系和相机坐标系为3维坐标系统，图像物理坐标系和像素坐标系为成像平面上的2维坐标系统。
+
 他们之间存在一定的转换关系，为三维空间点与图片像素点建立对应关系。
 \subsection{世界坐标系到相机坐标系}
-两者之间的转换为刚体变换，描述的是相机本身相对于参考系的姿态，即\textbf{外参矩阵}。表示如下：
+两者之间的转换为刚体变换，描述的是相机本身相对于参考系的姿态，即\textbf{外参矩阵}。
+
+表示如下：
 \[Matrix_{Ex} = \begin{bmatrix}
 R & T \\
 0^{T} & 1
@@ -64,11 +79,16 @@ R & T \\
 某三维点在相机系下坐标表示为$X_{cam}$，世界系表示为$X_{w}$，使用齐次坐标表示转换关系如下：
 \begin{equation}
 \label{ex}
-X_{cam} = Matrix_{Ex} \cdot X_w
+X_{cam} = \begin{bmatrix} X_c \\ Y_c \\ Z_c\end{bmatrix}
+= Matrix_{Ex} \cdot X_w= Matrix_{Ex} \cdot\begin{bmatrix}X_w \\ Y_w \\ Z_w\end{bmatrix}
 \end{equation}
 
 \subsection{相机坐标系到图像物理坐标系}
-表现的是投影的过程。根据三角形相似原理，相机系下3维点的坐标$(X,Y,Z)$经过直线投影，对应的2维像平面坐标为$(f\frac{X_c}{Z_c}, f\frac{Y_c}{Z_c}$，其中$f$表示相机的焦距。同样的，为了用简单的矩阵乘法表示转换过程，我们引入齐次坐标，表达如下：
+表现的是投影的过程。
+
+如Fig. \ref{fig:camera2}，根据三角形相似原理，相机系下3维点的坐标$(X,Y,Z)$经过直线投影，
+对应的2维像平面坐标为$(f\frac{X_c}{Z_c}, f\frac{Y_c}{Z_c}$，其中$f$表示相机的焦距。
+同样的，为了用简单的矩阵乘法表示转换过程，我们引入齐次坐标，表达如下：
 \begin{equation}
 \label{eq:in1}
 \begin{bmatrix}
@@ -102,8 +122,8 @@ m_x & 0 & u_0 \\
 \end{equation}
 
 \subsection{标定矩阵}
-标定矩阵$P$包括两部分，外参矩阵和内参矩阵。
-其中外参矩阵如公式(\pageref{ex})所示，内参矩阵$K$包括公式(\ref{eq:in1})和(\ref{eq:in2}).
+标定矩阵$P$包括两部分，\textbf{外参矩阵}和\textbf{内参矩阵}。
+其中外参矩阵如公式(\ref{ex})所示，内参矩阵$K$包括公式(\ref{eq:in1})和(\ref{eq:in2}).
 \begin{equation}
 \label{ww}
 K = \begin{bmatrix}
@@ -118,45 +138,73 @@ P = K \begin{bmatrix}  I & | & \mathbf{0}\end{bmatrix} Matrix_{ex} = K \begin{bm
 \begin{equation}
 x = P \cdot X_w
 \end{equation}
-
+其中，内参矩阵只与相机本身有关；在世界坐标系确定的情况下，外参矩阵只与相机运动有关。
 \section{原理理解}
-\subsection{相机成像原理}
+
 我们用到的是经典的小孔成像原理，它的核心是三角形相似。通过上一节的介绍，我们已经了解到了三维空间的某个点是如何通过投影并最终在图像中用像素坐标表示。
 其中$\alpha_x$是用像素单位表示的焦距，$u_0, v_0$表示图像$x, y$方向上像素的一半。
+\subsection{畸变}
+实际成像过程中形成的图像相比于理想成像，会存在一定的畸变。
+\begin{itemize}
+    \item 
+        光线在远离透镜中心的地方会更及弯曲，形成径向畸变,如Fig. \ref{fig:dis1}。
+        径向畸变一般用三个参数确定，且可以建模如下：
+        \begin{equation}
+            \label{eq:dis1}
+            \begin{aligned}
+                x_{undistorted} =& x( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) \\ 
+                y_{undistorted} =& y( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6)
+            \end{aligned}
+        \end{equation}
+        其中，$x,y$是获取到的包含畸变的坐标点，$x_{undistorted}$是修正后的理想坐标点。
+        \begin{figure}[htbp]
+            \centering
+            \subfigure[桶形失真]{\includegraphics[height=8.5cm,width=3.5cm]{3.png}}s
+            \subfigure[枕形失真]{\includegraphics[height=8.5cm,width=3.5cm]{4.png}}
+            \caption{径向畸变}
+            \label{fig:dis1}
+        \end{figure}
+    \item
+        由于镜头制作时感光元平面与镜头不平行，会导致切向畸变，如Fig. \ref{fig:dis2}。切向畸变一般用两个参数确定，且可以建模如下：
+        \begin{equation}
+            \label{eq:dis2}
+            \begin{aligned}
+                x_{undistorted} =& x + [ 2p_1xy + p_2(r^2+2x^2)] \\ 
+                y_{undistorted} =& y + [ p_1(r^2+ 2y^2)+ 2p_2xy]
+            \end{aligned}
+        \end{equation}
+        \begin{figure}[htbp]
+            \centering
+            \includegraphics[height=4.5cm,width=5.5cm]{5.png}
+            \caption{切向畸变}
+            \label{fig:dis2}
+        \end{figure}
+\end{itemize}
 
-成像过程存在一定的畸变，主要包括切向畸变和径向畸变。
 
-径向畸变可以建模如下：
-\begin{align}
-    x_{distorted} =& x( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6) \\ 
-    y_{distorted} =& y( 1 + k_1 r^2 + k_2 r^4 + k_3 r^6)
-\end{align}
 
-切向畸变可以建模如下：
-\begin{align}
-    x_{distorted} =& x + [ 2p_1xy + p_2(r^2+2x^2)] \\ 
-    y_{distorted} =& y + [ p_1(r^2+ 2y^2)+ 2p_2xy]
-\end{align}
 \subsection{张氏标定}
 标定单个相机是通过对应图像二维像素点与空间三维实际点，最终得到该相机的内参和畸变参数的过程。
 一般的标定方法分为使用标定物和自标定两种。标定物又分为三维标定物和二维平面。
 
 张氏标定法中，标定物是一个二维棋盘平面，并假定该平面在世界系中的$Z$轴坐标均为0。
 通过不同的角度拍摄标定物，得到一组图像。针对每幅图像进行角点检测，通过对应图像中的角点与3维空间角点坐标，构建相应的坐标转换公式。
-一般选取12张图片来求解这11个参数。
+一般选取10张图片来求解。
 完整的标定过程大致如下：
+\subsection{获取标定图像}
+打印一张棋盘格并贴在平面上作为标定物。通过变换拍摄视角或标定物方向，拍摄一组照片。
 \subsubsection{提取成像平面角点}
 我们选择棋盘交叉点即角点作为标定点。通过角点检测可以找到每幅图中各个角点的像素位置。
 \subsubsection{提取亚像素角点信息}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[height=4.5cm,width=9.5cm]{/home/vickylzy/Desktop/cornersubpix.png}
+    \includegraphics[height=4.5cm,width=9.5cm]{cornersubpix.png}
     \caption{亚像素优化}
 \end{figure}
 对于一角点$q$，在其邻域区间内取任一点$p$，向量$\overrightarrow {qp} $一定与当前点$q$所在邻域内$p$点的灰度梯度方向的转置正交，即$\overrightarrow {qp} {\rm{ }} \cdot {\rm{ }}D{I_p}^T = 0$，于是有待最小化的误差式：
-$$
-\epsilon _i = {DI_{p_i}}^T \cdot (q - p_i)
-$$
+\begin{equation}
+    \epsilon _i = {DI_{p_i}}^T \cdot (q - p_i)
+\end{equation}
 其中${DI_p}^T$是p点的梯度方向转置。
 \subsubsection{标定计算过程}
 初始化每幅图像的角点的三维空间坐标
@@ -179,15 +227,28 @@ $$
     \left\{ \begin{array}{l}v_{12}^Tb = 0 \\ v_{11}^Tb = v_{22}^Tb \end{array}\right.
     $$
     \item 通过扩展每幅图像的$v$，得到$V$，并且有$Vb=0$成立，$b$是$V^T V$的特征向量。
-    \item 根据$b$求解$K$矩阵
+    \item 根据$b$得到$B$，并进行cholesky分解得到$K$矩阵
     \item 在求解出$H,K$的情况下，利用旋转矩阵的正交性质求解外参
-    \item 求解畸变参数
-    \item 极大似然估计进行参数的迭代优化
+    $$
+    \left\{
+    \begin{aligned}
+        r_1&=\lambda A^{-1} h_1 \\
+        r_2& = \lambda A^{-1} h_2 \\
+        r_3 &=r_1*×r_2 \\
+        t&=\frac{1}{\lambda} K^{-1} h_2 \\
+        \lambda &= \|K^{-1}h_1\|
+    \end{aligned}
+    \right.
+    $$
+    \item 根据通过闭合形式求解到的内、外参数，使用最小二乘,估计畸变参数
+    \item 构造极大似然估计函数，使用LM算法进行所有参数的迭代优化
 \end{itemize}
 \subsubsection{评价}
 根据计算出的内参、外参以及畸变参数，计算三维角点转换后的像素坐标与之前检测出的坐标差距，衡量参数求解的精度水平。
 \subsubsection{标定效果}
-根据计算出的畸变参数，将整幅图像进行矫正。
+根据计算出的畸变参数，将整幅图像进行矫正恢复。
+
+该过程是通过公式(\ref{eq:dis1})和(\ref{eq:dis2})，形成像素坐标的映射关系，再根据灰度不变性形成新的图像。
 
 
 \section{实验结果}
