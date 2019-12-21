@@ -78,7 +78,11 @@ class OpticalFlow:
                 feature = cv.cornerSubPix(first_gray, raw_feature, (11, 11), (-1, -1), (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_COUNT, 30, 0.01))
                 if feature is not None:  
                     for x, y in np.float32(feature).reshape(-1, 2):  
-                        self.tracks.append([(x, y)])#新添追踪点   ([()])  -1,1,2
+                        for x1, y1 in np.float32(vec[-1]for vec in self.tracks).reshape(-1,2):
+                            if x==x1 and y==y1:
+                                continue
+                            else:
+                                self.tracks.append([(x, y)])#新添追踪点   ([()])  -1,1,2
  
                 ##确认之前的基准，避免丢失
             self.old_gray = new_gray

@@ -1,4 +1,5 @@
-\documentclass[10pt,a4paper]{article}
+% \documentclass[10pt,a4paper]{article}
+\documentclass[UTF8]{ctexart}
 \usepackage{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{CJKutf8}
@@ -41,7 +42,7 @@
 示意图如Fig. \ref{fig:camera1}.
 \begin{figure}[htbp]
     \centering
-    \includegraphics[height=4.5cm,width=8.5cm]{/home/midou/class/cv/cv_1report/1.png}
+    \includegraphics[height=4.5cm,width=8.5cm]{1.png}
     \caption{小孔成像简化示意图}
     \label{fig:camera1}
 \end{figure}
@@ -49,7 +50,7 @@
 将三维物体成像过程抽象为Fig. \ref{fig:camera2}中的数学模型，为点的匹配建立数学上的对应关系。
 \begin{figure}[htbp]
     \centering
-    \includegraphics[height=4.5cm,width=8.5cm]{/home/midou/class/cv/cv_1report/2.png}
+    \includegraphics[height=4.5cm,width=8.5cm]{2.png}
     \caption{小孔成像数学模型}
     \label{fig:camera2}
 \end{figure}
@@ -159,8 +160,7 @@ x = P \cdot X_w
         其中，$x,y$是获取到的包含畸变的坐标点，$x_{undistorted}$是修正后的理想坐标点。
         \begin{figure}[htbp]
             \centering
-            \subfigure[桶形失真]{\includegraphics[height=8.5cm,width=3.5cm]{3.png}}s
-            \subfigure[枕形失真]{\includegraphics[height=8.5cm,width=3.5cm]{4.png}}
+            \includegraphics[height=3.5cm,width=9.5cm]{3.png}
             \caption{径向畸变}
             \label{fig:dis1}
         \end{figure}
@@ -191,10 +191,18 @@ x = P \cdot X_w
 通过不同的角度拍摄标定物，得到一组图像。针对每幅图像进行角点检测，通过对应图像中的角点与3维空间角点坐标，构建相应的坐标转换公式。
 一般选取10张图片来求解。
 完整的标定过程大致如下：
-\subsection{获取标定图像}
+\subsubsection{获取标定图像}
 打印一张棋盘格并贴在平面上作为标定物。通过变换拍摄视角或标定物方向，拍摄一组照片。
 \subsubsection{提取成像平面角点}
 我们选择棋盘交叉点即角点作为标定点。通过角点检测可以找到每幅图中各个角点的像素位置。
+
+opencv内置的棋盘格检测算法大致包含以下几个步骤：
+\begin{itemize}
+    \item 对图像进行自适应阈值的二值化处理，使得图像中棋盘格图样更加明显；
+    \item 对图像进行半径为1的膨胀运算，使得棋盘格中黑色的方格分离；
+    \item 采用边缘检测处理提取图像中所有黑方格的边缘，并采用多边形拟合算法对边缘进行处理，去除不是方形边缘的干扰
+    \item 提取所有黑方格的角点，移除非重复的角点，再根据标定板角点尺寸信息对保留下的角点进行进一步优化。
+\end{itemize}
 \subsubsection{提取亚像素角点信息}
 \begin{figure}[htbp]
     \centering
