@@ -38,7 +38,8 @@ class OpticalFlow:
             if not ret:
                 print("读取图像失败")
                 break
-            new_gray = cv.cvtColor(new_frame, cv.COLOR_BGR2GRAY)
+	    frame = new_frame[60:, :]
+            new_gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
             vis = new_frame.copy()  
             if len(self.tracks) > 0:
                 img1, img2 = self.old_gray, new_gray

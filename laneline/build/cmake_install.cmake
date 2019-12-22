@@ -1,4 +1,4 @@
-# Install script for directory: /media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/camera_calibarte
+# Install script for directory: /media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/laneline
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/camera_calibarte/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/laneline/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

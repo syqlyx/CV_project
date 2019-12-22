@@ -20,7 +20,7 @@ public:
     void read_images(){
         // cv::Directory dir;//opencv 类
         // fileNames = dir.GetListFiles(dir_path,"*.jpg", false);
-        cv:String jpg = "/media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/Assignment1/Mode2";
+        cv:String jpg = "/media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/Assignment/Assignment1/Mode2";
         // std::vector<cv::String> fileNames;//名字列表
         cv::glob(jpg, fileNames);
     }
@@ -33,6 +33,8 @@ public:
             return false;
         }
         cv::cvtColor(imageInput, image, CV_RGB2GRAY);
+        imshow("dd", image);
+        waitKey(0);
         found = findChessboardCorners(image, patternSize, image_points_buf, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);//8,6
         if(found){
             cornerSubPix(image, image_points_buf, winSize, zeroZone, criteria);//image_points_buf会被重写
@@ -134,7 +136,7 @@ private:
 
     // vector<string> fileNames;
     std::vector<cv::String> fileNames;
-    string dir_path = "/media/vickylzy/文件共享盘/A3_研一/课程/计算机视觉/Assignment1/shots/";
+    string dir_path = "/media/vickylzy/文件共享盘/A3_研一/课程/计算机视觉/Assignment/Assignment1/shots/";
     Mat imageInput;
     Mat image;
     Mat new_image;

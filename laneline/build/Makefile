@@ -48,24 +48,13 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/camera_calibarte
+CMAKE_SOURCE_DIR = /media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/laneline
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/camera_calibarte/build
+CMAKE_BINARY_DIR = /media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/laneline/build
 
 #=============================================================================
 # Targets provided globally by CMake.
-
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -78,11 +67,22 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
+
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/camera_calibarte/build/CMakeFiles /media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/camera_calibarte/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/laneline/build/CMakeFiles /media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/laneline/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/camera_calibarte/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/CV2019_project/laneline/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,44 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named calibration_node
+# Target rules for targets named laneline_node
 
 # Build rule for target.
-calibration_node: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 calibration_node
-.PHONY : calibration_node
+laneline_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 laneline_node
+.PHONY : laneline_node
 
 # fast build rule for target.
-calibration_node/fast:
-	$(MAKE) -f CMakeFiles/calibration_node.dir/build.make CMakeFiles/calibration_node.dir/build
-.PHONY : calibration_node/fast
+laneline_node/fast:
+	$(MAKE) -f CMakeFiles/laneline_node.dir/build.make CMakeFiles/laneline_node.dir/build
+.PHONY : laneline_node/fast
 
-calibrate_camera.o: calibrate_camera.cpp.o
+laneline.o: laneline.cpp.o
 
-.PHONY : calibrate_camera.o
+.PHONY : laneline.o
 
 # target to build an object file
-calibrate_camera.cpp.o:
-	$(MAKE) -f CMakeFiles/calibration_node.dir/build.make CMakeFiles/calibration_node.dir/calibrate_camera.cpp.o
-.PHONY : calibrate_camera.cpp.o
+laneline.cpp.o:
+	$(MAKE) -f CMakeFiles/laneline_node.dir/build.make CMakeFiles/laneline_node.dir/laneline.cpp.o
+.PHONY : laneline.cpp.o
 
-calibrate_camera.i: calibrate_camera.cpp.i
+laneline.i: laneline.cpp.i
 
-.PHONY : calibrate_camera.i
+.PHONY : laneline.i
 
 # target to preprocess a source file
-calibrate_camera.cpp.i:
-	$(MAKE) -f CMakeFiles/calibration_node.dir/build.make CMakeFiles/calibration_node.dir/calibrate_camera.cpp.i
-.PHONY : calibrate_camera.cpp.i
+laneline.cpp.i:
+	$(MAKE) -f CMakeFiles/laneline_node.dir/build.make CMakeFiles/laneline_node.dir/laneline.cpp.i
+.PHONY : laneline.cpp.i
 
-calibrate_camera.s: calibrate_camera.cpp.s
+laneline.s: laneline.cpp.s
 
-.PHONY : calibrate_camera.s
+.PHONY : laneline.s
 
 # target to generate assembly for a file
-calibrate_camera.cpp.s:
-	$(MAKE) -f CMakeFiles/calibration_node.dir/build.make CMakeFiles/calibration_node.dir/calibrate_camera.cpp.s
-.PHONY : calibrate_camera.cpp.s
+laneline.cpp.s:
+	$(MAKE) -f CMakeFiles/laneline_node.dir/build.make CMakeFiles/laneline_node.dir/laneline.cpp.s
+.PHONY : laneline.cpp.s
 
 # Help Target
 help:
@@ -156,12 +156,12 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... calibration_node"
-	@echo "... calibrate_camera.o"
-	@echo "... calibrate_camera.i"
-	@echo "... calibrate_camera.s"
+	@echo "... rebuild_cache"
+	@echo "... laneline_node"
+	@echo "... laneline.o"
+	@echo "... laneline.i"
+	@echo "... laneline.s"
 .PHONY : help
 
 
