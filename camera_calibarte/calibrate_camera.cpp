@@ -20,7 +20,7 @@ public:
     void read_images(){
         // cv::Directory dir;//opencv 类
         // fileNames = dir.GetListFiles(dir_path,"*.jpg", false);
-        cv:String jpg = "/media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/Assignment/Assignment1/Mode2";
+        cv:String jpg = "/media/vickylzy/文件共享盘/A3_grade_one/class/computer_vision/Assignment/Assignment1/Mode1";
         // std::vector<cv::String> fileNames;//名字列表
         cv::glob(jpg, fileNames);
     }
@@ -33,14 +33,13 @@ public:
             return false;
         }
         cv::cvtColor(imageInput, image, CV_RGB2GRAY);
-        imshow("dd", image);
-        waitKey(0);
         found = findChessboardCorners(image, patternSize, image_points_buf, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);//8,6
         if(found){
-            cornerSubPix(image, image_points_buf, winSize, zeroZone, criteria);//image_points_buf会被重写
+            // cornerSubPix(image, image_points_buf, winSize, zeroZone, criteria);//image_points_buf会被重写
+            find4QuadCornerSubpix(image, image_points_buf, Size(5, 5));
             drawChessboardCorners(image, patternSize, image_points_buf, found);//image会被重写
-            // cv::imshow("corner",image);//显示图片
-			// waitKey(50);//暂停0.5S
+            cv::imshow("corner",image);//显示图片
+			waitKey(10);//暂停0.3S
             image_points.push_back(image_points_buf);
             return true;
         }
@@ -93,7 +92,7 @@ public:
             Mat t = tvecsMat[count];
             projectPoints(objp, r, t, cameraMatrix, distCoeffs, imgp_projection);
             float err = cv::norm(Mat(imgp), Mat(imgp_projection), cv::NORM_L2);
-            float error = sqrt(err*err/48);
+            float error = err/48;
             cout<<error<<endl;
         }
         //error
@@ -117,7 +116,7 @@ private:
     Size winSize = cv::Size(5,5);
     Size zeroZone= cv::Size(-1,-1);
     Size patternSize = cv::Size(width, height);/* 每行、列的角点数 */
-    Size square_size = Size(5,5);  /* 实际测量得到的标定板上每个棋盘格的大小 */
+    Size square_size = Size(26, 26);  /* 实际测量得到的标定板上每个棋盘格的大小 */
     Size image_size;
     TermCriteria criteria = TermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 30, 0.01);//精度到0.01或者次数到30，亚像素角点检测算法便退出;
     vector<Point2f> image_points_buf;//一张图片经过角点提取，得到的所有角点坐标
